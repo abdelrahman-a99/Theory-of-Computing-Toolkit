@@ -1,76 +1,70 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import RegexInput from '../components/RegexInput';
-import NFAResult from '../components/NFAResult';
-
-type NFA = {
-  start_state: string;
-  accept_state: string;
-  transitions: Record<string, Record<string, string[]>>;
-  image_url: string;
-};
+import Link from 'next/link';
 
 export default function Home() {
-  const [regex, setRegex] = useState('');
-  const [nfa, setNfa] = useState<NFA | null>(null);
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [imageUrl, setImageUrl] = useState('');
-
-  useEffect(() => {
-    if (nfa && nfa.image_url) {
-      setImageUrl(nfa.image_url);
-    }
-  }, [nfa]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError('');
-
-    try {
-      const response = await fetch('http://localhost:5000/api/convert', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ regex }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Failed to convert regex');
-      }
-
-      const data = await response.json();
-      setNfa(data);
-    }
-
-    catch (err) {
-      setError(err instanceof Error ? err.message : 'An unknown error occurred');
-      setNfa(null);
-    }
-
-    finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
-    <main className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md mx-auto bg-white rounded-xl shadow-md overflow-hidden md:max-w-2xl p-6">
-        <h1 className="text-2xl font-bold text-gray-800 mb-6">Regex to NFA Converter</h1>
+    <main className="min-h-screen bg-gray-50 px-6 py-16">
+      <div className="max-w-4xl mx-auto">
+        <header className="mb-12">
+          <p className="text-sm font-medium text-indigo-600 mb-3">
+            Theory of Computing
+          </p>
 
-        <form onSubmit={handleSubmit} className="mb-6">
-          <RegexInput regex={regex} setRegex={setRegex} isLoading={isLoading} />
-        </form>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            Theory Toolkit
+          </h1>
 
-        {error && (
-          <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700">
-            <p>{error}</p>
-          </div>
-        )}
+          <p className="text-gray-600 leading-relaxed">
+            Convert regular expressions and context-free grammars
+            into automata, inspect their transitions, and explore
+            their behavior.
+          </p>
+        </header>
 
-        {nfa && <NFAResult nfa={nfa} />}
+        <div className="grid gap-6 md:grid-cols-2">
+          <Link
+            href="/regex-to-nfa"
+            className="block rounded-xl border border-gray-200 bg-white p-8 shadow-sm transition hover:border-indigo-400 hover:shadow-md"
+          >
+            <span className="text-sm font-medium text-indigo-600">
+              Project 01
+            </span>
+
+            <h2 className="text-2xl font-semibold text-gray-900 mt-4 mb-3">
+              Regex → NFA
+            </h2>
+
+            <p className="text-gray-600 leading-relaxed">
+              Convert a regular expression into a nondeterministic
+              finite automaton and view its states and transitions.
+            </p>
+
+            <p className="text-indigo-600 font-medium mt-6">
+              Open converter →
+            </p>
+          </Link>
+
+          <Link
+            href="/cfg-to-pda"
+            className="block rounded-xl border border-gray-200 bg-white p-8 shadow-sm transition hover:border-indigo-400 hover:shadow-md"
+          >
+            <span className="text-sm font-medium text-indigo-600">
+              Project 02
+            </span>
+
+            <h2 className="text-2xl font-semibold text-gray-900 mt-4 mb-3">
+              CFG → PDA
+            </h2>
+
+            <p className="text-gray-600 leading-relaxed">
+              Build a pushdown automaton from a context-free grammar
+              and test whether strings belong to its language.
+            </p>
+
+            <p className="text-indigo-600 font-medium mt-6">
+              Open converter →
+            </p>
+          </Link>
+        </div>
       </div>
     </main>
   );
