@@ -15,8 +15,7 @@ env/
 .pytest_cache/
 
 # Environment files
-.env
-.env.*
+.env*
 !.env.example
 
 # Generated automaton diagrams
@@ -31,3 +30,25 @@ pda_graph*
 # Operating system files
 .DS_Store
 Thumbs.db
+
+# Additional frontend artifacts
+frontend/coverage/
+frontend/build/
+frontend/.pnp
+frontend/.pnp.*
+
+# Yarn files
+frontend/.yarn/*
+!frontend/.yarn/patches/
+!frontend/.yarn/plugins/
+!frontend/.yarn/releases/
+!frontend/.yarn/versions/
+
+# Private key files
+*.pem
+
+# Debug logs, including rotated logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
